@@ -1,0 +1,79 @@
+/* Reset & Base */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+body { background-color: #fff; color: #1c1e21; }
+
+/* Header */
+.fb-header {
+    background-color: #3b5998;
+    padding: 10px;
+    text-align: center;
+}
+.fb-logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Warning Section */
+.alert-box {
+    background-color: #fffbe2;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: #3b5998;
+}
+
+.container { padding: 15px; }
+
+/* App Banner */
+.app-banner {
+    display: flex;
+    align-items: center;
+    background-color: #fffbe2;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.app-banner p { color: #3b5998; font-size: 14px; margin-left: 10px; }
+
+/* Form Elements */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dddfe2;
+    font-size: 16px;
+}
+.input-field.top { border-bottom: none; border-radius: 4px 4px 0 0; }
+.input-field.bottom { border-radius: 0 0 4px 4px; margin-bottom: 15px; }
+
+.btn-login {
+    width: 100%;
+    background-color: #4e69a2;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Footer & Buttons */
+.btn-register {
+    width: 60%;
+    display: block;
+    margin: 20px auto;
+    background-color: #42b72a; /* Warna hijau tombol buat akun */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Modifikasi tombol hijau di gambar (Biru Muda) */
+.btn-register { background-color: #5b91f5; } 
+
+.footer-links { text-align: center; font-size: 14px; margin-top: 15px; }
+.footer-links a { color: #7596c8; text-decoration: none; }
