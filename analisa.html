@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D - Rohli Genteng</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center;font-family:monospace} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .result-num{font-size:1.5rem;display:block;margin-top:5px;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>INPUT 4 ANGKA DEPAN</h3><input type="number" id="input4" placeholder="Contoh: 0345" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">PROSES ANALISA</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#0ff; color:#0ff;"><span>HASIL POLA A:</span><strong id="resA" class="result-num"></strong></div><div class="res-box" style="border-color:#f0f; color:#f0f;"><span>HASIL POLA B:</span><strong id="resB" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali ke Menu Utama</a><audio id="sound" src="posang.mp3"></audio><script>
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D V4.3</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center;font-family:monospace} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .result-num{font-size:1.5rem;display:block;margin-top:5px;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>MASUKKAN 4 ANGKA</h3><input type="number" id="input4" placeholder="Contoh: 0345" oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">PROSES ACAK 7D</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#0ff; color:#0ff;"><span>HASIL POLA A:</span><strong id="resA" class="result-num"></strong></div><div class="res-box" style="border-color:#f0f; color:#f0f;"><span>HASIL POLA B:</span><strong id="resB" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali ke Menu Utama</a><audio id="sound" src="posang.mp3"></audio><script>
 const dataPola = {
 "0345": ["678", "679", "789"],
 "0235": ["678", "679", "789"],
@@ -9,30 +9,45 @@ const dataPola = {
 "1245": ["678", "679", "789"]
 };
 
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array.join(" ");
+}
+
 function prosesAnalisa(){
   const val = document.getElementById("input4").value;
   if(val.length < 4){alert("Masukkan 4 angka!"); return}
-  
   document.getElementById("sound").play().catch(e=>{});
   
   let match = dataPola[val];
-  let hasilA, hasilB;
+  let finalA, finalB;
 
   if(match){
-    // Ambil acak dari daftar pola yang lu kasih
-    let acak1 = match[Math.floor(Math.random() * match.length)];
-    let acak2 = match[Math.floor(Math.random() * match.length)];
-    hasilA = val + " " + acak1;
-    hasilB = val + " " + acak2;
+    // Ambil angka dasar dari input
+    let base = val.split("").map(Number);
+    // Pilih pasangan dari database
+    let p1 = match[Math.floor(Math.random() * match.length)].split("").map(Number);
+    let p2 = match[Math.floor(Math.random() * match.length)].split("").map(Number);
+    
+    // Gabungkan dan ACAK TOTAL
+    finalA = shuffle([...base, ...p1]);
+    finalB = shuffle([...base, ...p2]);
   } else {
-    // Jika tidak ada di daftar, acak manual 3 angka belakang
-    let manual = Math.floor(Math.random() * 900) + 100;
-    hasilA = val + " " + manual;
-    hasilB = val + " " + (manual + 11);
+    // Jika tidak ada di daftar, acak manual 7 digit total
+    let manual = [];
+    while(manual.length < 7){
+      let r = Math.floor(Math.random() * 10);
+      if(!manual.includes(r)) manual.push(r);
+    }
+    finalA = manual.join(" ");
+    finalB = manual.reverse().join(" ");
   }
 
-  document.getElementById("resA").innerText = hasilA;
-  document.getElementById("resB").innerText = hasilB;
+  document.getElementById("resA").innerText = finalA;
+  document.getElementById("resB").innerText = finalB;
   document.getElementById("resultArea").style.display = "block";
 }
 </script></body></html>
