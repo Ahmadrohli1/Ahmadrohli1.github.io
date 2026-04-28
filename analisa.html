@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D - Kunci Nasib</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .hero-img{width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #0f0;margin-bottom:15px} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .label{font-size:0.8rem;font-weight:bold;display:block;margin-bottom:5px} .result-num{font-size:1.5rem;display:block;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>INPUT 4 ANGKA</h3><input type="number" id="input4" placeholder="Input..." oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">ANALISA SEKARANG</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#ff4444; color:#ff4444;"><span class="label">JARANG KELUAR:</span><strong id="resJarang" class="result-num"></strong></div><div class="res-box" style="border-color:#44ff44; color:#44ff44;"><span class="label">SERING KELUAR:</span><strong id="resSering" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali</a><audio id="sound" src="posang.mp3"></audio><script>
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D FIXED - Rohli Genteng</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .hero-img{width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #0f0;margin-bottom:15px} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .label{font-size:0.8rem;font-weight:bold;display:block;margin-bottom:5px} .result-num{font-size:1.5rem;display:block;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>INPUT 4 ANGKA</h3><input type="number" id="input4" placeholder="Input..." oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">ANALISA SEKARANG</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#ff4444; color:#ff4444;"><span class="label">JARANG KELUAR:</span><strong id="resJarang" class="result-num"></strong></div><div class="res-box" style="border-color:#44ff44; color:#44ff44;"><span class="label">SERING KELUAR:</span><strong id="resSering" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali</a><audio id="sound" src="posang.mp3"></audio><script>
 const dbJarang = {"0345":["678","679","789"],"0235":["678","679","789"],"0245":["678","679"],"1235":["789"],"1234":["789"],"1345":["678","679","789"],"1245":["678","679","789"],"0234":["678","679","789"]};
 const dbSering = {"0145":["678","679","789"],"0135":["678","679","789"],"0134":["678","679","789"],"0124":["678","679","789"],"0123":["678","679","789"],"0345":["678","679","789"],"0235":["678","679","789"],"0245":["678","679"],"1234":["678","679"],"1235":["789","679"],"1345":["678","679","789"],"1245":["678","679","789"]};
 
@@ -7,41 +7,42 @@ function getSeededRandom(seed) {
     return x - Math.floor(x);
 }
 
-function lockedShuffle(array, seed) {
-    let a = [...array];
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(getSeededRandom(seed + i) * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a.join(" ");
-}
-
-function getLockedOutput(input, db, typeSeed) {
+function getUniqueOutput(input, db, typeSeed) {
     let numInput = parseInt(input);
-    let base = input.split("").map(Number);
-    let match = db[input];
-    let extra = [];
     let seed = numInput + typeSeed;
-
+    let baseChars = input.split("");
+    let finalSet = new Set(baseChars.map(Number));
+    
+    let match = db[input];
     if (match) {
         let idx = Math.floor(getSeededRandom(seed) * match.length);
-        extra = match[idx].split("").map(Number);
-    } else {
-        let pool = [0,1,2,3,4,5,6,7,8,9].filter(n => !base.includes(n));
-        for(let i=0; i<3; i++) {
-            let rIdx = Math.floor(getSeededRandom(seed + i) * pool.length);
-            extra.push(pool.splice(rIdx, 1)[0]);
-        }
+        let extra = match[idx].split("").map(Number);
+        extra.forEach(n => { if(finalSet.size < 7) finalSet.add(n); });
     }
-    return lockedShuffle([...base, ...extra], seed);
+
+    let pool = [0,1,2,3,4,5,6,7,8,9];
+    let i = 0;
+    while(finalSet.size < 7) {
+        let rIdx = Math.floor(getSeededRandom(seed + (i++)) * pool.length);
+        let pick = pool[rIdx];
+        finalSet.add(pick);
+        pool.splice(rIdx, 1);
+    }
+
+    let resultArr = Array.from(finalSet);
+    for (let j = resultArr.length - 1; j > 0; j--) {
+        const k = Math.floor(getSeededRandom(seed + j) * (j + 1));
+        [resultArr[j], resultArr[k]] = [resultArr[k], resultArr[j]];
+    }
+    return resultArr.join(" ");
 }
 
 function prosesAnalisa() {
     const val = document.getElementById("input4").value;
     if(val.length < 4) return;
     document.getElementById("sound").play().catch(e=>{});
-    document.getElementById("resJarang").innerText = getLockedOutput(val, dbJarang, 777);
-    document.getElementById("resSering").innerText = getLockedOutput(val, dbSering, 888);
+    document.getElementById("resJarang").innerText = getUniqueOutput(val, dbJarang, 777);
+    document.getElementById("resSering").innerText = getUniqueOutput(val, dbSering, 888);
     document.getElementById("resultArea").style.display = "block";
 }
 </script></body></html>
