@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D - Murni Database</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .hero-img{width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #0f0;margin-bottom:15px} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .label{font-size:0.8rem;font-weight:bold;display:block;margin-bottom:5px} .result-num{font-size:1.5rem;display:block;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>INPUT 4 ANGKA</h3><input type="number" id="input4" placeholder="Input..." oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">ANALISA DATABASE</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#ff4444; color:#ff4444;"><span class="label">JARANG KELUAR:</span><strong id="resJarang" class="result-num"></strong></div><div class="res-box" style="border-color:#44ff44; color:#44ff44;"><span class="label">SERING KELUAR:</span><strong id="resSering" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali</a><audio id="sound" src="posang.mp3"></audio><script>
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D - Rohli Genteng</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .hero-img{width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #0f0;margin-bottom:15px} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .label{font-size:0.8rem;font-weight:bold;display:block;margin-bottom:5px} .result-num{font-size:1.5rem;display:block;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>INPUT 4 ANGKA</h3><input type="number" id="input4" placeholder="Input..." oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">ANALISA DATABASE</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#ff4444; color:#ff4444;"><span class="label">JARANG KELUAR:</span><strong id="resJarang" class="result-num"></strong></div><div class="res-box" style="border-color:#44ff44; color:#44ff44;"><span class="label">SERING KELUAR:</span><strong id="resSering" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali</a><audio id="sound" src="posang.mp3"></audio><script>
 const dbJarang = {"0345":["678","679","789"],"0235":["678","679","789"],"0245":["678","679"],"1235":["789"],"1234":["789"],"1345":["678","679","789"],"1245":["678","679","789"],"0234":["678","679","789"]};
 const dbSering = {"0145":["678","679","789"],"0135":["678","679","789"],"0134":["678","679","789"],"0124":["678","679","789"],"0123":["678","679","789"],"0345":["678","679","789"],"0235":["678","679","789"],"0245":["678","679"],"1234":["678","679"],"1235":["789","679"],"1345":["678","679","789"],"1245":["678","679","789"]};
 
@@ -7,30 +7,38 @@ function getSeededRandom(seed) {
     return x - Math.floor(x);
 }
 
-function getDatabaseOutput(input, db, typeSeed) {
+function getFixedRatioOutput(input, db, typeSeed) {
     let seed = parseInt(input) + typeSeed;
-    let finalSet = new Set();
+    let pool = new Set();
     
-    // 1. Ambil dari DATABASE dulu sesuai input
     let match = db[input];
     if (match) {
-        // Ambil pola (misal "678") dan input itu sendiri ("0345") sesuai isi database lu
         let combo = input + match[Math.floor(getSeededRandom(seed) * match.length)];
-        combo.split("").forEach(n => { if(finalSet.size < 7) finalSet.add(Number(n)); });
+        combo.split("").forEach(n => pool.add(Number(n)));
     }
 
-    // 2. Kalau belum 7 digit, baru penuhi dengan acakan unik
-    let pool = [0,1,2,3,4,5,6,7,8,9];
-    let i = 0;
-    while(finalSet.size < 7) {
-        let rIdx = Math.floor(getSeededRandom(seed + (i++)) * pool.length);
-        let pick = pool[rIdx];
-        if(!finalSet.has(pick)) finalSet.add(pick);
-        pool.splice(rIdx, 1);
+    // Klasifikasi: Besar (6-9), Kecil (0-5)
+    let besarPool = [6,7,8,9].filter(n => !pool.has(n));
+    let kecilPool = [0,1,2,3,4,5].filter(n => !pool.has(n));
+    
+    let currentBesar = Array.from(pool).filter(n => n >= 6);
+    let currentKecil = Array.from(pool).filter(n => n < 6);
+
+    // Filter jika kelebihan
+    while(currentBesar.length > 3) currentBesar.splice(Math.floor(getSeededRandom(seed++) * currentBesar.length), 1);
+    while(currentKecil.length > 4) currentKecil.splice(Math.floor(getSeededRandom(seed++) * currentKecil.length), 1);
+
+    // Tambah jika kurang
+    while(currentBesar.length < 3 && besarPool.length > 0) {
+        let rIdx = Math.floor(getSeededRandom(seed++) * besarPool.length);
+        currentBesar.push(besarPool.splice(rIdx, 1)[0]);
+    }
+    while(currentKecil.length < 4 && kecilPool.length > 0) {
+        let rIdx = Math.floor(getSeededRandom(seed++) * kecilPool.length);
+        currentKecil.push(kecilPool.splice(rIdx, 1)[0]);
     }
 
-    // 3. Kunci urutan (Shuffle berbasis Seed)
-    let resultArr = Array.from(finalSet);
+    let resultArr = [...currentBesar, ...currentKecil];
     for (let j = resultArr.length - 1; j > 0; j--) {
         const k = Math.floor(getSeededRandom(seed + j) * (j + 1));
         [resultArr[j], resultArr[k]] = [resultArr[k], resultArr[j]];
@@ -42,8 +50,8 @@ function prosesAnalisa() {
     const val = document.getElementById("input4").value;
     if(val.length < 4) return;
     document.getElementById("sound").play().catch(e=>{});
-    document.getElementById("resJarang").innerText = getDatabaseOutput(val, dbJarang, 777);
-    document.getElementById("resSering").innerText = getDatabaseOutput(val, dbSering, 888);
+    document.getElementById("resJarang").innerText = getFixedRatioOutput(val, dbJarang, 777);
+    document.getElementById("resSering").innerText = getFixedRatioOutput(val, dbSering, 888);
     document.getElementById("resultArea").style.display = "block";
 }
 </script></body></html>
