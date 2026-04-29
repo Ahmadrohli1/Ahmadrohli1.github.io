@@ -1,44 +1,35 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA 7D - Rohli Genteng</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .hero-img{width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #0f0;margin-bottom:15px} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:12px;border:1px dashed #0f0;text-align:center} .label{font-size:0.8rem;font-weight:bold;display:block;margin-bottom:5px} .result-num{font-size:1.5rem;display:block;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ANALISA 7 DIGIT</h2><div class="card"><h3>INPUT 4 ANGKA</h3><input type="number" id="input4" placeholder="Input..." oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">ANALISA SEKARANG</button><div id="resultArea" style="display:none;"><div class="res-box" style="border-color:#ff4444; color:#ff4444;"><span class="label">JARANG KELUAR:</span><strong id="resJarang" class="result-num"></strong></div><div class="res-box" style="border-color:#44ff44; color:#44ff44;"><span class="label">SERING KELUAR:</span><strong id="resSering" class="result-num"></strong></div></div></div><a href="index.html" class="back-link">< Kembali</a><audio id="sound" src="posang.mp3"></audio><script>
-const dbJarang = {
-  "0345":["678","679","789","689"],"0235":["678","679","789","689"],"0245":["678","679","689"],"1235":["789","689"],"1234":["789","689"],"1345":["678","679","789","689"],"1245":["678","679","789","689"],"0234":["678","679","789","689"]
-};
-const dbSering = {
-  "0145":["678","679","789"],"0135":["678","679","789"],"0134":["678","679","789"],"0124":["678","679","789","689"],"0123":["678","679","789","689"],"0345":["678","679","789","689"],"0235":["678","679","789","689"],"0245":["678","679","689"],"1234":["678","679","689"],"1235":["789","679","689"],"1345":["678","679","789","689"],"1245":["678","679","789","689"],"0125":["689"]
-};
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ANALISA FIXED - Rohli Genteng</title><style>body{background:#000;color:#0f0;font-family:monospace;padding:20px;display:flex;flex-direction:column;align-items:center} .hero-img{width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #0f0;margin-bottom:15px} .card{border:2px solid #0f0;padding:20px;width:100%;max-width:400px;background:#050505;text-align:center} input{width:90%;padding:15px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;font-size:1.2rem;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer;margin-top:10px;text-transform:uppercase} .res-box{margin-top:15px;padding:10px;border:1px dashed #0f0;text-align:center} .label{font-size:0.7rem;font-weight:bold;display:block;margin-bottom:3px} .result-num{font-size:1.3rem;display:block;letter-spacing:2px} .back-link{margin-top:20px;color:#0f0;text-decoration:none;font-size:0.9rem;border-bottom:1px solid #0f0}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ANALISA ROHLI</h2><div class="card"><h3>INPUT 4 ANGKA</h3><input type="number" id="input4" placeholder="Input..." oninput="if(this.value.length > 4) this.value = this.value.slice(0,4)"><button onclick="prosesAnalisa()">PROSES ANALISA</button><div id="resultArea" style="display:none;"><div style="color:#ff4444"><h4>HASIL JARANG</h4><div class="res-box"><span class="label">7 DIGIT:</span><strong id="resJ7" class="result-num"></strong></div><div class="res-box"><span class="label">6 DIGIT:</span><strong id="resJ6" class="result-num"></strong></div></div><div style="color:#44ff44; margin-top:20px"><h4>HASIL SERING</h4><div class="res-box"><span class="label">7 DIGIT:</span><strong id="resS7" class="result-num"></strong></div><div class="res-box"><span class="label">6 DIGIT:</span><strong id="resS6" class="result-num"></strong></div></div></div></div><a href="index.html" class="back-link">< Kembali</a><audio id="sound" src="posang.mp3"></audio><script>
+const dbJarang = {"0345":["678","679","789","689"],"0235":["678","679","789","689"],"0245":["678","679","689"],"1235":["789","689"],"1234":["789","689"],"1345":["678","679","789","689"],"1245":["678","679","789","689"],"0234":["678","679","789","689"]};
+const dbSering = {"0145":["678","679","789"],"0135":["678","679","789"],"0134":["678","679","789"],"0124":["678","679","789","689"],"0123":["678","679","789","689"],"0345":["678","679","789","689"],"0235":["678","679","789","689"],"0245":["678","679","689"],"1234":["678","679","689"],"1235":["789","679","689"],"1345":["678","679","789","689"],"1245":["678","679","789","689"],"0125":["689"]};
 
 function getSeededRandom(seed) {
     let x = Math.sin(seed++) * 10000;
     return x - Math.floor(x);
 }
 
-function getFixedRatioOutput(input, db, typeSeed) {
+function getRatioOutput(input, db, typeSeed, totalDigit, maxBesar) {
     let seed = parseInt(input) + typeSeed;
     let pool = new Set();
-    
     let match = db[input];
     if (match) {
         let combo = input + match[Math.floor(getSeededRandom(seed) * match.length)];
         combo.split("").forEach(n => pool.add(Number(n)));
     }
-
     let besarPool = [6,7,8,9].filter(n => !pool.has(n));
     let kecilPool = [0,1,2,3,4,5].filter(n => !pool.has(n));
-    
     let currentBesar = Array.from(pool).filter(n => n >= 6);
     let currentKecil = Array.from(pool).filter(n => n < 6);
-
-    while(currentBesar.length > 3) currentBesar.splice(Math.floor(getSeededRandom(seed++) * currentBesar.length), 1);
-    while(currentKecil.length > 4) currentKecil.splice(Math.floor(getSeededRandom(seed++) * currentKecil.length), 1);
-
-    while(currentBesar.length < 3 && besarPool.length > 0) {
+    let maxKecil = totalDigit - maxBesar;
+    while(currentBesar.length > maxBesar) currentBesar.splice(Math.floor(getSeededRandom(seed++) * currentBesar.length), 1);
+    while(currentKecil.length > maxKecil) currentKecil.splice(Math.floor(getSeededRandom(seed++) * currentKecil.length), 1);
+    while(currentBesar.length < maxBesar && besarPool.length > 0) {
         let rIdx = Math.floor(getSeededRandom(seed++) * besarPool.length);
         currentBesar.push(besarPool.splice(rIdx, 1)[0]);
     }
-    while(currentKecil.length < 4 && kecilPool.length > 0) {
+    while(currentKecil.length < maxKecil && kecilPool.length > 0) {
         let rIdx = Math.floor(getSeededRandom(seed++) * kecilPool.length);
         currentKecil.push(kecilPool.splice(rIdx, 1)[0]);
     }
-
     let resultArr = [...currentBesar, ...currentKecil];
     for (let j = resultArr.length - 1; j > 0; j--) {
         const k = Math.floor(getSeededRandom(seed + j) * (j + 1));
@@ -51,8 +42,10 @@ function prosesAnalisa() {
     const val = document.getElementById("input4").value;
     if(val.length < 4) return;
     document.getElementById("sound").play().catch(e=>{});
-    document.getElementById("resJarang").innerText = getFixedRatioOutput(val, dbJarang, 777);
-    document.getElementById("resSering").innerText = getFixedRatioOutput(val, dbSering, 888);
+    document.getElementById("resJ7").innerText = getRatioOutput(val, dbJarang, 777, 7, 3);
+    document.getElementById("resJ6").innerText = getRatioOutput(val, dbJarang, 666, 6, 3);
+    document.getElementById("resS7").innerText = getRatioOutput(val, dbSering, 888, 7, 3);
+    document.getElementById("resS6").innerText = getRatioOutput(val, dbSering, 555, 6, 3);
     document.getElementById("resultArea").style.display = "block";
 }
 </script></body></html>
