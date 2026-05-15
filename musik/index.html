@@ -1,30 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROHLI PLAYER PRO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0c0c0c; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .player { background: #151515; width: 90%; max-width: 380px; padding: 30px; border-radius: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .art { width: 100%; aspect-ratio: 1/1; background: linear-gradient(45deg, #1db954, #121212); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; font-size: 50px; }
+        h2 { font-size: 20px; margin-bottom: 5px; color: #fff; }
+        p { color: #1db954; font-size: 14px; margin-bottom: 20px; }
+        audio { width: 100%; filter: invert(1); margin-bottom: 20px; }
+        .nav { display: flex; justify-content: space-between; gap: 10px; }
+        button { flex: 1; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-prev { background: #333; color: #fff; }
+        .btn-next { background: #1db954; color: #000; }
+    </style>
+</head>
+<body>
+<div class="player">
+    <div class="art">♪</div>
+    <h2 id="title">Memuat...</h2>
+    <p>Ahmad Rohli Playlist</p>
+    <audio id="audio" controls></audio>
+    <div class="nav">
+        <button class="btn-prev" onclick="changeSong(-1)">PREV</button>
+        <button class="btn-next" onclick="changeSong(1)">NEXT</button>
+    </div>
+</div>
 <script>
-    // DAFTAR LAGU BERSIH - TANPA POSANG & SUARA
     const playlist = [
         "Arabic.mp3",
         "Benciku sangka sayang.mp3",
         "Evi Tamala Aku rindu padamu.mp3",
         "musik.mp3"
     ];
-
     let current = 0;
     const audio = document.getElementById('audio');
     const title = document.getElementById('title');
-
     function load(index) {
-        if(playlist[index]) {
-            audio.src = playlist[index];
-            title.innerText = playlist[index].replace('.mp3', '').toUpperCase();
-            audio.play();
-        }
+        const file = playlist[index];
+        audio.src = file;
+        title.innerText = file.replace('.mp3', '').toUpperCase();
+        audio.play().catch(() => {});
     }
-
     function changeSong(dir) {
         current = (current + dir + playlist.length) % playlist.length;
         load(current);
     }
-
-    // Inisialisasi awal
-    title.innerText = playlist[0].replace('.mp3', '').toUpperCase();
+    // Setup awal
     audio.src = playlist[0];
+    title.innerText = playlist[0].replace('.mp3', '').toUpperCase();
 </script>
+</body>
+</html>
