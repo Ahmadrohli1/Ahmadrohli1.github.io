@@ -1,1 +1,33 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Rohli Genteng</title><link rel="manifest" href="manifest.json?v=2"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><meta name="apple-mobile-web-app-title" content="Rohli Genteng"><link rel="icon" sizes="192x192" href="icon.jpg"><link rel="apple-touch-icon" href="icon.jpg"><style>body{background:#000;color:#0f0;font-family:monospace;display:flex;flex-direction:column;align-items:center;min-height:100vh;margin:0} .hero-img{width:100px;height:100px;object-fit:cover;border-radius:50%;border:3px solid #0f0;margin-top:30px} .container{padding:20px;width:100%;max-width:400px;box-sizing:border-box;text-align:center} .card{border:2px solid #0f0;padding:20px;background:#050505;margin-bottom:20px} input{width:90%;padding:12px;margin:10px 0;background:#000;border:1px solid #0f0;color:#0f0;text-align:center} button{width:100%;padding:15px;background:#0f0;color:#000;border:none;font-weight:bold;cursor:pointer}</style></head><body><img src="icon.jpg" class="hero-img"><h2>ROHLI GENTENG</h2><div class="container"><div class="card"><h3>TEORI SCATTER</h3><input type="number" id="seedInput" placeholder="Angka Kemarin"><button onclick="generateAll()">ACAK ANGKA</button><div id="resultArea" style="display:none;margin-top:20px;border:1px dashed #0f0;padding:10px">6D: <strong id="res6"></strong><br>8D: <strong id="res8"></strong></div></div><a href="analisa.html" style="color:#0f0;text-decoration:none;border:1px solid #0f0;padding:10px;display:block">ANALISA 7 DIGIT ></a></div><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js?v=2")} function generateAll(){const s=document.getElementById("seedInput").value;if(!s)return;document.getElementById("res6").innerText=Math.random().toString().slice(2,8);document.getElementById("res8").innerText=Math.random().toString().slice(2,10);document.getElementById("resultArea").style.display="block"}</script></body></html>
+<script>
+    // LIST LAGU - CUKUP EDIT DI SINI SEKALI SAJA
+    // Masukkan nama file asli yang ada di folder 'musik' kamu
+    const playlist = [
+        "Arabic.mp3",
+        "Benciku sangka sayang.mp3",
+        "Evi Tamala Aku rindu padamu.mp3",
+        "posang.mp3"
+    ];
+
+    let currentTrack = 0;
+    const player = document.getElementById('audioPlayer');
+    const songLabel = document.getElementById('songName');
+
+    function loadTrack(index) {
+        const fileName = playlist[index];
+        player.src = fileName;
+        // Menampilkan nama file sebagai judul (menghapus ".mp3")
+        songLabel.innerText = fileName.replace('.mp3', '').toUpperCase();
+        player.play().catch(e => console.log("Menunggu interaksi..."));
+    }
+
+    function changeSong(direction) {
+        currentTrack += direction;
+        if (currentTrack < 0) currentTrack = playlist.length - 1;
+        if (currentTrack >= playlist.length) currentTrack = 0;
+        loadTrack(currentTrack);
+    }
+
+    // Inisialisasi awal
+    songLabel.innerText = playlist[0].replace('.mp3', '').toUpperCase();
+    player.src = playlist[0];
+</script>
